@@ -1,6 +1,7 @@
 package fr.epita.csvDemo;
 
 public class NewCSVDataModel {
+	String totalvehicle,streetindex,northdata,southdata,day,month;
 	
 	public String getTotalvehicle() {
         return totalvehicle;
@@ -50,7 +51,7 @@ public class NewCSVDataModel {
         this.month = month;
     }
 
-    String totalvehicle,streetindex,northdata,southdata,day,month;
+    
     public NewCSVDataModel(){
 
     }

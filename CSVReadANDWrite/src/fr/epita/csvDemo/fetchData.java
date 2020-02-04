@@ -10,6 +10,12 @@ public class fetchData {
 	    String latitude;
 	    String longitude;
 	    String location;
+	    String northdata;
+	    String southdata;
+	    String day;
+	    String month;
+	    String streetindex;
+	    int total_vehicle;
 
 	    public String getNorthdata() {
 	        return northdata;
@@ -51,12 +57,7 @@ public class fetchData {
 	        this.streetindex = streetindex;
 	    }
 
-	    String northdata;
-	    String southdata;
-	    String day;
-	    String month;
-	    String streetindex;
-	    int total_vehicle;
+	    
 
 	    public fetchData(){
 
