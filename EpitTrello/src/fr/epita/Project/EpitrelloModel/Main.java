@@ -1,9 +1,11 @@
 package fr.epita.Project.EpitrelloModel;
 
+import java.io.IOException;
+
 public class Main {
 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		EpitrelloDataService dataserverice = new EpitrelloDataService();
 

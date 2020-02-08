@@ -1,18 +1,27 @@
 package fr.epita.Project.EpitrelloModel;
 
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class EpitrelloDataService {
-
+	static String filename = "Epitrello.txt";
 	private List<User> users = new ArrayList<User>();
 	private List<Task> tasks = new ArrayList<Task>();
 	private List<list> lists = new ArrayList<list>();
+	public PrintWriter pw;
+	
 
-	// Add User
+	/**
+	 * addUser();
+	 * @param username
+	 * @return success if it's a valid user with unique name
+	 */
 	public String addUser(String username) {
 
 		if (!checkUser(username)) {
@@ -23,7 +32,12 @@ public class EpitrelloDataService {
 		}
 	}
 
-	// Check User
+	/**
+	 * Check User
+	 * check the user if it already exists. 
+	 * @param user
+	 * @return 
+	 */
 	public boolean checkUser(String user) {
 		boolean isDuplicate = false;
 		for (User tempUser : users) {
@@ -128,7 +142,7 @@ public class EpitrelloDataService {
 	}
 
 	// Print Task and their details
-	public String printTask(String name) {
+	public String printTask(String name) throws IOException {
 		Task TempTask = getTask(name);
 		String FormatedString = TempTask.getTaskName() + "\n" + TempTask.getDescription() + "\n" + "Priority: "
 				+ TempTask.getPriority() + "\n" + "Estimated Time: " + TempTask.getEstimatedTime() + "\n";
@@ -140,11 +154,14 @@ public class EpitrelloDataService {
 		if (TempTask.getUserTask().size() == 0) {
 			FormatedString += "Unassigned";
 		}
+		pw = new PrintWriter(new FileWriter(filename),true);
+		pw.println(FormatedString);
+		
 		return FormatedString;
 
 	}
 
-	//
+	//Complete Task
 	public String completeTask(String taskname) {
 		Task TempTask = getTask(taskname);
 		if (TempTask != null) {
@@ -154,7 +171,8 @@ public class EpitrelloDataService {
 		return "Task Doesn't Exists";
 	}
 
-	public String printUsersByPerformance() {
+	//Print User By Performance
+	public String printUsersByPerformance() throws IOException {
 
 		List<Task> DescendingUser = tasks.stream().sorted(Comparator.comparing(Task::getEstimatedTime).reversed())
 				.collect(Collectors.toList());
@@ -164,11 +182,12 @@ public class EpitrelloDataService {
 				usersBytime += user.getUsername() + "\n";
 			}
 		}
-
+		pw.println(usersBytime);
 		return usersBytime;
 	}
-
-	public String printUsersByWorkload() {
+	
+	//Print User by WorkLoad
+	public String printUsersByWorkload() throws IOException {
 
 		List<Task> AscendingUser = tasks.stream().sorted(Comparator.comparing(Task::getEstimatedTime))
 				.collect(Collectors.toList());
@@ -178,12 +197,17 @@ public class EpitrelloDataService {
 				usersBytime += user.getUsername() + "\n";
 			}
 		}
-
+		pw.println(usersBytime);
 		return usersBytime;
 
 	}
-
-	public String printUnassignedTasksByPriority() {
+	
+	/***
+	 * 
+	 * @return: All unassigned Task by priority
+	 * @throws IOException 
+	 */
+	public String printUnassignedTasksByPriority() throws IOException {
 		String formatedString = "";
 		for (Task task : tasks) {
 			if (task.getUserTask().size() == 0) {
@@ -191,11 +215,16 @@ public class EpitrelloDataService {
 						+ task.getEstimatedTime() + "h \n";
 			}
 		}
-
+		pw.println(formatedString);
 		return formatedString;
 
 	}
-
+	
+	/**
+	 * delete task form List
+	 * @param taskname
+	 * @return success if list exists and deleted.
+	 */
 	public String deleteTask(String taskname) {
 		Task Temptask = getTask(taskname);
 		if (Temptask != null) {
@@ -204,8 +233,15 @@ public class EpitrelloDataService {
 		}
 		return "Task Doesn't Available";
 	}
-
-	public String printAllUnfinishedTasksByPriority() {
+	
+	
+	/**
+	 * print All Unfinished Tasks By Priority.
+	 * It sort the task by proirity
+	 * @return all task that are unassigned to the user
+	 * @throws IOException 
+	 */
+	public String printAllUnfinishedTasksByPriority() throws IOException {
 		List<Task> AscendbyPriority = tasks.stream().sorted(Comparator.comparing(Task::getPriority))
 				.collect(Collectors.toList());
 		String formatedString = "";
@@ -221,9 +257,16 @@ public class EpitrelloDataService {
 				formatedString += tempTask.getEstimatedTime() + "h \n";
 			}
 		}
+		pw.println(formatedString);
 		return formatedString;
 	}
-
+	
+	/**
+	 * moveTask() it moves the task to another List.
+	 * @param task
+	 * @param list
+	 * @return success if task & list exists and move.
+	 */
 	public String moveTask(String task, String list) {
 		Task tempTask = getTask(task);
 		list tempList = getList(list);
@@ -238,7 +281,12 @@ public class EpitrelloDataService {
 		}
 
 	}
-
+	
+	/**
+	 * it get the required list from the lists
+	 * @param listName
+	 * @return required list
+	 */
 	public list getList(String listName) {
 		for (list availablelist : lists) {
 			if (availablelist.getListName().equals(listName)) {
@@ -248,7 +296,13 @@ public class EpitrelloDataService {
 		return null;
 	}
 
-	public String printList(String list) {
+	/**
+	 * printList() it prints all the specific task from the list
+	 * @param list
+	 * @return formattedstring that contains alltask in list.
+	 * @throws IOException 
+	 */
+	public String printList(String list) throws IOException {
 
 		list tempList = getList(list);
 		String FormatedString = "List " + tempList.getListName() + "\n";
@@ -264,11 +318,17 @@ public class EpitrelloDataService {
 				FormatedString += TempTask.getEstimatedTime() + "h \n";
 			}
 		}
+		pw.println(FormatedString);
 		return FormatedString;
 
 	}
-
-	public String printAllLists() {
+	
+	/**
+	 * it prints all the existing lists and their tasks.
+	 * @return
+	 * @throws IOException 
+	 */
+	public String printAllLists() throws IOException {
 		String FormatedString = "";
 		for (list templist : lists) {
 			FormatedString += "List " + templist.getListName() + "\n";
@@ -286,31 +346,41 @@ public class EpitrelloDataService {
 			}
 			FormatedString += "\n";
 		}
+		pw.println(FormatedString);
 		return FormatedString;
 
 	}
 	
-	public String printUserTasks(String username) {
+	/**
+	 * prints all user that are assigned task
+	 * @param username
+	 * @return
+	 * @throws IOException 
+	 */
+	public String printUserTasks(String username) throws IOException {
 		User TempUser = getUser(username);
-		
-		String AlluserswithTask ="";
-		if(TempUser != null) {
+
+		String AlluserswithTask = "";
+		if (TempUser != null) {
 			for (Task tempTask : tasks) {
-				
-				for(User Tuser : tempTask.getUserTask()) {
-					if(Tuser.getUsername().equals(username)){
-					 AlluserswithTask += tempTask.getPriority() + " | " + tempTask.getTaskName() + " | ";
-					 AlluserswithTask += Tuser.getUsername() + " | ";
-					 AlluserswithTask += tempTask.getEstimatedTime() + "h \n";	
+
+				for (User Tuser : tempTask.getUserTask()) {
+					if (Tuser.getUsername().equals(username)) {
+						AlluserswithTask += tempTask.getPriority() + " | " + tempTask.getTaskName() + " | ";
+						AlluserswithTask += Tuser.getUsername() + " | ";
+						AlluserswithTask += tempTask.getEstimatedTime() + "h \n";
+					}
 				}
-				}
-				
+
 			}
 		}
-		return AlluserswithTask;		
-		
+		pw.println(AlluserswithTask);
+		pw.flush();
+		pw.close();
+		return AlluserswithTask;
+
 	}
 	
-
+	
 
 }

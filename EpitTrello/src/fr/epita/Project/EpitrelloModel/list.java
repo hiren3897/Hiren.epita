@@ -1,7 +1,7 @@
 package fr.epita.Project.EpitrelloModel;
 
 public class list {
-	
+
 	private String listName;
 
 	public String getListName() {
@@ -13,11 +13,8 @@ public class list {
 	}
 
 	public list(String listName) {
-		
+
 		this.listName = listName;
 	}
-	
-	
-	
 
 }
