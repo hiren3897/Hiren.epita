@@ -2,9 +2,10 @@ package fr.epita.Project.EpitrelloModel;
 
 public class Main {
 
+	
 	public static void main(String[] args) {
 		
-		EpitrelloDataServerice dataserverice;
+		EpitrelloDataService dataserverice = new EpitrelloDataService();
 
 		System.out.println( dataserverice.addUser("Thomas") ); // addUser(string username)
 		System.out.println( dataserverice.addUser("AmirAli") );
@@ -42,17 +43,17 @@ public class Main {
 		System.out.println( dataserverice.printTask("Have fun") );
 
 	    System.out.println( dataserverice.printList("Code") ); // printList(string list)
-
+//
 	    System.out.println( dataserverice.printAllLists() );
-
+//
 	    System.out.println( dataserverice.printUserTasks("AmirAli") ); // printUserTasks(string user)
-
+//
 	    System.out.println( dataserverice.printUnassignedTasksByPriority() );
-
+//
 	    System.out.println( dataserverice.printAllUnfinishedTasksByPriority() );
-
-	    //TODO Write all the prints into a file.
-	    //TODO Save users in a db.
+//
+//	    //TODO Write all the prints into a file.
+//	    //TODO Save users in a db.
 
 	}
 

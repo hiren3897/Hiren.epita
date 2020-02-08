@@ -13,10 +13,14 @@ import hiren.Practical.CSVModel;
 import hiren.Practical.Datafetch;;
 
 public class CSVEntry {
-	
+	public static List<CSVModel> datalist;
+	private static final String COMMA_DELIMITER = ",";
+ 
+    //CSV file header
+    private static final String FILE_HEADER = "ADDRESS,CITY,COUNTRY,NAME";
  
 	
-	public List<Datafetch> readAll() throws IOException{
+	public static List<Datafetch> readAll() throws IOException{
 		List<Datafetch> Alldata= new ArrayList<>();
 		
 		List<String> lines= Files.readAllLines(new File("C:\\eclipse\\supermarkets.csv").toPath());
@@ -38,7 +42,7 @@ public class CSVEntry {
 		return Alldata;
 	}
 
-	public List<CSVModel> city_country_split() throws IOException {
+	public static List<CSVModel> city_country_split() throws IOException {
 		List<CSVModel> allData = new ArrayList<>();
 		List<Datafetch> result= readAll();
 		for (int i = 0; i < result.size(); i++) {
@@ -58,7 +62,23 @@ public class CSVEntry {
 		return allData;
 		
 	}
-	
+	 
+	public static void writeCsvFile(String filename) throws IOException {
+		PrintWriter pw = new PrintWriter(new FileWriter(filename));
+		pw.println(FILE_HEADER.toString());
+		datalist = city_country_split();
+		for (CSVModel dataModel : datalist) {
+			pw.print(dataModel.getCSV_address());
+			pw.print(COMMA_DELIMITER);
+			pw.print(dataModel.getCSV_City());
+			pw.print(COMMA_DELIMITER);
+			pw.print(dataModel.getCSV_Country());
+			pw.print(COMMA_DELIMITER);
+			pw.println(dataModel.getCSV_Name());
+		}
+		pw.flush();
+		pw.close();
+	}
 	
 	
 
