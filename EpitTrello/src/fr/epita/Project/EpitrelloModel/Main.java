@@ -5,13 +5,16 @@ import java.io.IOException;
 public class Main {
 
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		
 		EpitrelloDataService dataserverice = new EpitrelloDataService();
 
 		System.out.println( dataserverice.addUser("Thomas") ); // addUser(string username)
 		System.out.println( dataserverice.addUser("AmirAli") );
 		System.out.println( dataserverice.addUser("Rabih") );
+		System.out.println( dataserverice.addUser("Hiren") );
+		System.out.println( dataserverice.addUser("Rahul") );
+		System.out.println( dataserverice.addUser("Razak") );
 
 		System.out.println( dataserverice.addList("Code") ); //addList(string name)
 		System.out.println( dataserverice.addList("Description") );
@@ -56,6 +59,7 @@ public class Main {
 //
 //	    //TODO Write all the prints into a file.
 //	    //TODO Save users in a db.
+	    System.out.println( dataserverice.Insert());
 
 	}
 

@@ -4,12 +4,25 @@ package fr.epita.Project.EpitrelloModel;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class EpitrelloDataService {
+	
+	// JDBC driver name and database URL 
+	   static final String JDBC_DRIVER = "org.h2.Driver";   
+	   static final String DB_URL = "jdbc:h2:tcp://localhost/~/test";
+	   static final String USER = "sa"; 
+	   static final String PASS = "1234"; 
+	   
+	private static final String INSERT_QUERY = "INSERT INTO EPITRELLO_USERS(USERNAME) VALUES (?)";
 	static String filename = "Epitrello.txt";
 	private List<User> users = new ArrayList<User>();
 	private List<Task> tasks = new ArrayList<Task>();
@@ -381,6 +394,33 @@ public class EpitrelloDataService {
 
 	}
 	
-	
+	public int Insert() {
+		
+		try {
+			Class.forName(JDBC_DRIVER);
+			
+			 //STEP 2: Open a connection 
+	         System.out.println("Connecting to database..."); 
+	        Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+	        
+	        boolean status = conn == null ? false : true;
+	        System.out.println("Database connected: "+status);
+	        PreparedStatement preparedStatement = conn.prepareStatement(INSERT_QUERY);
+	        for (User user : users) {
+	        	preparedStatement.setString(1,user.getUsername());
+	        	 preparedStatement.executeUpdate();
+			}
+	    
+	       
+
+			
+		} catch (Exception e) {
+			//throw a custom exception
+			e.printStackTrace();
+		}
+		return 0;
+
+	}
+
 
 }
