@@ -1,6 +1,5 @@
 package fr.epita.Project.EpitrelloModel;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,25 +12,24 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class EpitrelloDataService {
-	
-	// JDBC driver name and database URL 
-	   static final String JDBC_DRIVER = "org.h2.Driver";   
-	   static final String DB_URL = "jdbc:h2:tcp://localhost/~/test";
-	   static final String USER = "sa"; 
-	   static final String PASS = "1234"; 
-	   
+
+	// JDBC driver name and database URL
+	static final String JDBC_DRIVER = "org.h2.Driver";
+	static final String DB_URL = "jdbc:h2:tcp://localhost/~/test";
+	static final String USER = "sa";
+	static final String PASS = "1234";
+
 	private static final String INSERT_QUERY = "INSERT INTO EPITRELLO_USERS(USERNAME) VALUES (?)";
 	static String filename = "Epitrello.txt";
 	private List<User> users = new ArrayList<User>();
 	private List<Task> tasks = new ArrayList<Task>();
 	private List<list> lists = new ArrayList<list>();
 	public PrintWriter pw;
-	
 
 	/**
 	 * addUser();
+	 * 
 	 * @param username
 	 * @return success if it's a valid user with unique name
 	 */
@@ -46,10 +44,10 @@ public class EpitrelloDataService {
 	}
 
 	/**
-	 * Check User
-	 * check the user if it already exists. 
+	 * Check User check the user if it already exists.
+	 * 
 	 * @param user
-	 * @return 
+	 * @return
 	 */
 	public boolean checkUser(String user) {
 		boolean isDuplicate = false;
@@ -153,8 +151,14 @@ public class EpitrelloDataService {
 		}
 		return null;
 	}
-
-	// Print Task and their details
+	
+	/**
+	 * Print Task and their details
+	 * 
+	 * @param name
+	 * @return and print the result in file
+	 * @throws IOException
+	 */
 	public String printTask(String name) throws IOException {
 		Task TempTask = getTask(name);
 		String FormatedString = TempTask.getTaskName() + "\n" + TempTask.getDescription() + "\n" + "Priority: "
@@ -167,14 +171,14 @@ public class EpitrelloDataService {
 		if (TempTask.getUserTask().size() == 0) {
 			FormatedString += "Unassigned";
 		}
-		pw = new PrintWriter(new FileWriter(filename),true);
+		pw = new PrintWriter(new FileWriter(filename), true);
 		pw.println(FormatedString);
-		
+
 		return FormatedString;
 
 	}
 
-	//Complete Task
+	// Complete Task
 	public String completeTask(String taskname) {
 		Task TempTask = getTask(taskname);
 		if (TempTask != null) {
@@ -184,7 +188,8 @@ public class EpitrelloDataService {
 		return "Task Doesn't Exists";
 	}
 
-	//Print User By Performance
+	// Print User By Performance
+	// return and print the result in file
 	public String printUsersByPerformance() throws IOException {
 
 		List<Task> DescendingUser = tasks.stream().sorted(Comparator.comparing(Task::getEstimatedTime).reversed())
@@ -198,8 +203,9 @@ public class EpitrelloDataService {
 		pw.println(usersBytime);
 		return usersBytime;
 	}
-	
-	//Print User by WorkLoad
+
+	// Print User by WorkLoad
+	// return and print the result in file
 	public String printUsersByWorkload() throws IOException {
 
 		List<Task> AscendingUser = tasks.stream().sorted(Comparator.comparing(Task::getEstimatedTime))
@@ -214,11 +220,12 @@ public class EpitrelloDataService {
 		return usersBytime;
 
 	}
-	
+
 	/***
 	 * 
 	 * @return: All unassigned Task by priority
-	 * @throws IOException 
+	 * @throws IOException
+	 *  and print the result in file
 	 */
 	public String printUnassignedTasksByPriority() throws IOException {
 		String formatedString = "";
@@ -232,7 +239,7 @@ public class EpitrelloDataService {
 		return formatedString;
 
 	}
-	
+
 	/**
 	 * delete task form List
 	 * @param taskname
@@ -246,13 +253,12 @@ public class EpitrelloDataService {
 		}
 		return "Task Doesn't Available";
 	}
-	
-	
+
 	/**
-	 * print All Unfinished Tasks By Priority.
-	 * It sort the task by proirity
+	 * print All Unfinished Tasks By Priority. It sort the task by proirity
+	 *  and print the result in file
 	 * @return all task that are unassigned to the user
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public String printAllUnfinishedTasksByPriority() throws IOException {
 		List<Task> AscendbyPriority = tasks.stream().sorted(Comparator.comparing(Task::getPriority))
@@ -273,9 +279,10 @@ public class EpitrelloDataService {
 		pw.println(formatedString);
 		return formatedString;
 	}
-	
+
 	/**
 	 * moveTask() it moves the task to another List.
+	 * 
 	 * @param task
 	 * @param list
 	 * @return success if task & list exists and move.
@@ -294,9 +301,10 @@ public class EpitrelloDataService {
 		}
 
 	}
-	
+
 	/**
 	 * it get the required list from the lists
+	 * 
 	 * @param listName
 	 * @return required list
 	 */
@@ -311,9 +319,10 @@ public class EpitrelloDataService {
 
 	/**
 	 * printList() it prints all the specific task from the list
+	 *  and print the result in file
 	 * @param list
 	 * @return formattedstring that contains alltask in list.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public String printList(String list) throws IOException {
 
@@ -335,11 +344,12 @@ public class EpitrelloDataService {
 		return FormatedString;
 
 	}
-	
+
 	/**
 	 * it prints all the existing lists and their tasks.
+	 *  and print the result in file
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public String printAllLists() throws IOException {
 		String FormatedString = "";
@@ -363,12 +373,13 @@ public class EpitrelloDataService {
 		return FormatedString;
 
 	}
-	
+
 	/**
 	 * prints all user that are assigned task
+	 *  and print the result in file
 	 * @param username
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public String printUserTasks(String username) throws IOException {
 		User TempUser = getUser(username);
@@ -394,33 +405,34 @@ public class EpitrelloDataService {
 
 	}
 	
+	/**
+	 * Insert all the users added into the data base
+	 * @return
+	 */
 	public int Insert() {
-		
+
 		try {
 			Class.forName(JDBC_DRIVER);
-			
-			 //STEP 2: Open a connection 
-	         System.out.println("Connecting to database..."); 
-	        Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
-	        
-	        boolean status = conn == null ? false : true;
-	        System.out.println("Database connected: "+status);
-	        PreparedStatement preparedStatement = conn.prepareStatement(INSERT_QUERY);
-	        for (User user : users) {
-	        	preparedStatement.setString(1,user.getUsername());
-	        	 preparedStatement.executeUpdate();
-			}
-	    
-	       
 
-			
+			// STEP 2: Open a connection
+			System.out.println("Connecting to database...");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			//Test the connection
+			boolean status = conn == null ? false : true;
+			System.out.println("Database connected: " + status);
+			PreparedStatement preparedStatement = conn.prepareStatement(INSERT_QUERY);
+			for (User user : users) {
+				preparedStatement.setString(1, user.getUsername());
+				preparedStatement.executeUpdate();
+			}
+
 		} catch (Exception e) {
-			//throw a custom exception
+			// throw a custom exception
+			System.out.println("Connection Error");
 			e.printStackTrace();
 		}
-		return 0;
+		return 1;
 
 	}
-
 
 }
